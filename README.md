@@ -2,7 +2,7 @@
 
 A Docker image build on top of [emscripten/emsdk](https://hub.docker.com/r/emscripten/emsdk) image.
 
-This image also contains pre-build opencv wasm binaries, the build process is following [this guild from opencv](https://docs.opencv.org/3.4/d4/da1/tutorial_js_setup.html).
+This image also contains pre-build opencv (with contrib & enable nonfree) wasm binaries, the build process is following [this guild from opencv](https://docs.opencv.org/3.4/d4/da1/tutorial_js_setup.html).
 
 The purpose of this project is to provide a "ready to use" Docker image for other projects.
 
