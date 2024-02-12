@@ -1,0 +1,9 @@
+# files
+*.sh
+*.ps1
+*.cmd
+
+# folders
+/__pycache__/
+
+
