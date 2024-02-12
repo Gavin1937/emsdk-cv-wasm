@@ -25,7 +25,9 @@ docker build -t gavin1937/emsdk-cv-wasm:4.8.0 --build-arg="VERSION=4.8.0" .
   * `EMSCRIPTEN`: emscripten upstream directory
   * `OPENCV_VERSION`: opencv version
   * `OPENCV_SRC`: opencv source code directory
+  * `OPENCV_BUILD`: opencv build directory
   * `OPENCV_BUILD_WASM`: opencv build_wasm directory
+* OpenCV C++ library is also installed to the enviroment via `cmake --install`
 
 Use inside your Dockerfile
 
