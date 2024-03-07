@@ -1,4 +1,4 @@
-FROM emscripten/emsdk
+FROM emscripten/emsdk:3.1.55
 
 # setup environments
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -10,6 +10,8 @@ RUN \
     ffmpeg libavcodec-dev libavdevice-dev libavfilter-dev \
     libavformat-dev libavutil-dev libpostproc-dev \
     libswresample-dev libswscale-dev libeigen3-dev libblas-dev liblapack-dev
+
+COPY . /setup_tmp
 
 # build opencv into wasm
 ARG VERSION
@@ -30,11 +32,19 @@ RUN \
 
 # build opencv
 RUN cd "/opencv/opencv-${VERSION}" && mkdir build && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=/opencv/opencv_contrib-${VERSION}/modules/ && \
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_PERF_TESTS:BOOL=OFF \
+    -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=ON -DOPENCV_ENABLE_NONFREE=ON -DPARALLEL_ENABLE_PLUGINS=ON \
+    -DOPENCV_EXTRA_MODULES_PATH=/opencv/opencv_contrib-${VERSION}/modules/ && \
     cmake --build build && cmake --install build
 
 # build opencv js/wasm
 RUN cd "/opencv/opencv-${VERSION}" && mkdir build_wasm && \
-    python3 ./platforms/js/build_js.py build_wasm --build_wasm --cmake_option="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=/opencv/opencv_contrib-${VERSION}/modules/"
+    python3 /setup_tmp/fix_emscripten_linker_flags.py "/opencv/opencv-${VERSION}/modules/js/CMakeLists.txt" && \
+    python3 ./platforms/js/build_js.py build_wasm \
+    --build_wasm --threads --enable_exception \
+    --build_flags="-s WASM_MEM_MAX=2GB" \
+    --cmake_option="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=/opencv/opencv_contrib-${VERSION}/modules/ -s WASM_MEM_MAX=2GB"
+
+RUN rm -rf /setup_tmp
 
 ENTRYPOINT ["bash"]

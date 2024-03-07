@@ -1,0 +1,5 @@
+*.sh
+*.ps1
+*.cmd
+
+/__pycache__
