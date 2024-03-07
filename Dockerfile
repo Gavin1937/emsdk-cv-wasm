@@ -43,7 +43,7 @@ RUN cd "/opencv/opencv-${VERSION}" && mkdir build_wasm && \
     python3 ./platforms/js/build_js.py build_wasm \
     --build_wasm --threads --enable_exception \
     --build_flags="-s WASM_MEM_MAX=2GB" \
-    --cmake_option="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=/opencv/opencv_contrib-${VERSION}/modules/ -s WASM_MEM_MAX=2GB"
+    --cmake_option="-DBUILD_PERF_TESTS:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_DOCS:BOOL=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=/opencv/opencv_contrib-${VERSION}/modules/"
 
 RUN rm -rf /setup_tmp
 

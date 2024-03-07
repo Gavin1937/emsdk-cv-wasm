@@ -17,7 +17,7 @@ docker build -t gavin1937/emsdk-cv-wasm:4.8.0 --build-arg="VERSION=4.8.0" .
 ```
 
 * Note that, you need to supply the right version of opencv in both `tag` and `build-arg`
-* file `opencv-version-idx.txt` contains all the opencv versions that we build
+* file `docker-image-config.json` contains all the opencv versions and platforms that we build
 
 # Usage
 
